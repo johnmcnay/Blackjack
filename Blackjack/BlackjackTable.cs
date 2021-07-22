@@ -9,13 +9,8 @@ namespace Blackjack
     class BlackjackTable
     {
 
-        public List<BlackjackSeat> seats = new List<BlackjackSeat>();
+        public BlackjackPlayer player = new BlackjackPlayer();
         public BlackjackDealer dealer = new BlackjackDealer();
-
-        public BlackjackTable()
-        {
-            seats.Add(new BlackjackPlayer());
-        }
 
         public void PlayersDecide()
         {
@@ -25,20 +20,19 @@ namespace Blackjack
             {
                 do
                 {
-                    Console.WriteLine("Would you like to hit or stay?");
+                    Console.WriteLine("Hit or stay?");
                     input = Console.ReadLine();
-
 
                 } while (String.IsNullOrWhiteSpace(input));
 
                 if (input.ToLower() == "hit")
                 {
-                    seats[0].hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
+                    player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
 
                     DisplayHands();
 
                     //if bust
-                    if (seats[0].hand.BlackjackValue() > 21)
+                    if (player.hand.BlackjackValue() > 21)
                     {
                         Console.WriteLine("You have busted!");
                         return;
@@ -47,18 +41,46 @@ namespace Blackjack
 
             } while (input.ToLower() != "stay");
 
+            var faceDownCards = (from c in dealer.hand.PlayingCards
+                                 where c.IsFaceUp == false
+                                 select c).ToList();
+
+            foreach (var card in faceDownCards)
+            {
+                card.IsFaceUp = true;
+            }
+
             //dealer's turn
-            
+            while (dealer.hand.BlackjackValue() < 17)
+            {
+                dealer.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
+            }
+            DisplayHands();
+
+            if (dealer.hand.BlackjackValue() > 21)
+            {
+                Console.WriteLine($"The dealer has busted with a {dealer.hand.BlackjackValue()}!");
+            } else
+            {
+                if (dealer.hand.BlackjackValue() > player.hand.BlackjackValue())
+                {
+                    Console.WriteLine($"You lose against {dealer.hand.BlackjackValue()}!");
+                } 
+                else if (dealer.hand.BlackjackValue() < player.hand.BlackjackValue()) 
+                {
+                    Console.WriteLine($"You win against {dealer.hand.BlackjackValue()}!");
+                }
+                else
+                {
+                    Console.WriteLine("It's a push!");
+                }
+            }
         }
 
         public void DealRound()
         {
-
-            foreach (var seat in seats)
-            {
-                seat.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
-                seat.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
-            }
+            player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
+            player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
 
             dealer.DealSelf();
         }
@@ -77,12 +99,12 @@ namespace Blackjack
             output = "You have ";
 
             //coded for a single player
-            foreach (var card in seats[0].hand.PlayingCards)
+            foreach (var card in player.hand.PlayingCards)
             {
                 output += $"{card.OutputString()} ";
             }
 
-            output += $"Value: {seats[0].hand.BlackjackValue()}";
+            output += $"Value: {player.hand.BlackjackValue()}";
 
             Console.WriteLine(output);
         }

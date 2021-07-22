@@ -12,7 +12,16 @@ namespace Blackjack
 
         public void Shuffle()
         {
+            List<PlayingCard> shuffled = new List<PlayingCard>();
 
+            while (PlayingCards.Count > 0)
+            {
+                Random rnd = new Random();
+                int index = rnd.Next(PlayingCards.Count);
+                shuffled.Add(PlayingCards[index]);
+                PlayingCards.RemoveAt(index);
+            }
+            PlayingCards = shuffled;
         }
 
         private PlayingCard DrawOne()
@@ -36,7 +45,5 @@ namespace Blackjack
             card.IsFaceUp = false;
             return card;
         }
-
-
     }
 }

@@ -8,13 +8,15 @@ namespace Blackjack
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            BlackjackTable blackjack = new BlackjackTable();
-
-            blackjack.DealRound();
-            blackjack.DisplayHands();
-            blackjack.PlayersDecide();
-
-            return;
+            do
+            {
+                BlackjackTable blackjack = new BlackjackTable();
+                blackjack.DealRound();
+                blackjack.DisplayHands();
+                blackjack.PlayersDecide();
+                Console.WriteLine("Press enter to play again or type exit");
+            } while (Console.ReadLine().ToLower() != "exit");
+            
         }
     }
 }
