@@ -9,12 +9,14 @@ namespace Blackjack
     class BlackjackTable
     {
 
-        public BlackjackPlayer player = new BlackjackPlayer();
-        public BlackjackDealer dealer = new BlackjackDealer();
+        public BlackjackPlayer Player = new BlackjackPlayer();
+        public BlackjackDealer Dealer = new BlackjackDealer();
 
         public bool PlayerAction()
         {
-            Console.WriteLine($"You have ${player.Money}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"You have ${Player.Money}\n");
+            Console.ResetColor();
 
             DisplayHands();
             
@@ -24,22 +26,25 @@ namespace Blackjack
             {
                 do
                 {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Hit or stay?");
+                    Console.ResetColor();
                     input = Console.ReadLine();
 
                 } while (String.IsNullOrWhiteSpace(input));
 
                 if (input.ToLower() == "hit")
                 {
-                    player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
+                    Player.hand.PlayingCards.Add(Dealer.deck.DrawOneFaceUp());
 
                     DisplayHands();
 
-                    //if bust
-                    if (player.hand.BlackjackValue() > 21)
+                    if (Player.hand.BlackjackValue() > 21)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("You have busted!");
-                        player.Money -= 5;
+                        Console.ResetColor();
+                        Player.Money -= 5;
                         return false;
                     }
                 }
@@ -51,26 +56,39 @@ namespace Blackjack
 
         public bool CheckForNaturalBlackjack()
         {
-            int playerHandValue = player.hand.BlackjackValue();
-            int dealerHandValue = dealer.hand.BlackjackValue();
+            int playerHandValue = Player.hand.BlackjackValue();
+            int dealerHandValue = Dealer.hand.BlackjackValue();
 
             if (playerHandValue == 21)
             {
+                DisplayHands();
                 if (dealerHandValue == 21)
                 {
-                    Console.WriteLine("Tough luck. It's a push!");
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("Tough luck. Both you and the dealer hit Blackjack. It's a push!");
+                    Console.ResetColor();
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine("Blackjack! You win.");
-                    player.Money += 7.5;
+                    Console.ResetColor();
+                    Player.Money += 7.5;
                 }
                 return false;
             }
             else if (dealerHandValue == 21)
             {
+                Dealer.hand.FlipAllToFaceUp();
+                
+                DisplayHands();
+                
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Dealer gets a Blackjack. You lose!");
-                player.Money -= 5;
+                Console.ResetColor();
+                
+                Player.Money -= 5;
+                
                 return false;
             }
 
@@ -79,49 +97,50 @@ namespace Blackjack
 
         public void PrepareForNewRound()
         {
-            player.DiscardAllCards();
-            dealer.DiscardAllCards();
-            dealer.deck = new PlayingCardDeck();
+            Player.DiscardAllCards();
+            Dealer.DiscardAllCards();
+            Dealer.deck = new PlayingCardDeck();
         }
 
         public void DealerAction()
         {
-            var faceDownCards = (from c in dealer.hand.PlayingCards
-                                 where c.IsFaceUp == false
-                                 select c).ToList();
-
-            foreach (var card in faceDownCards)
-            {
-                card.IsFaceUp = true;
-            }
+            Dealer.hand.FlipAllToFaceUp();
 
             //dealer's turn
-            while (dealer.hand.BlackjackValue() < 17)
+            while (Dealer.hand.BlackjackValue() < 17)
             {
-                dealer.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
+                Dealer.hand.PlayingCards.Add(Dealer.deck.DrawOneFaceUp());
             }
             DisplayHands();
 
-            if (dealer.hand.BlackjackValue() > 21)
+            if (Dealer.hand.BlackjackValue() > 21)
             {
-                Console.WriteLine($"The dealer has busted with a {dealer.hand.BlackjackValue()}!");
-                player.Money += 5;
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine($"The dealer has busted with a {Dealer.hand.BlackjackValue()}! You win.");
+                Console.ResetColor();
+                Player.Money += 5;
             }
             else
             {
-                if (dealer.hand.BlackjackValue() > player.hand.BlackjackValue())
+                if (Dealer.hand.BlackjackValue() > Player.hand.BlackjackValue())
                 {
-                    Console.WriteLine($"You lose against {dealer.hand.BlackjackValue()}!");
-                    player.Money -= 5;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"You lose against {Dealer.hand.BlackjackValue()}!");
+                    Console.ResetColor();
+                    Player.Money -= 5;
                 }
-                else if (dealer.hand.BlackjackValue() < player.hand.BlackjackValue())
+                else if (Dealer.hand.BlackjackValue() < Player.hand.BlackjackValue())
                 {
-                    Console.WriteLine($"You win against {dealer.hand.BlackjackValue()}!");
-                    player.Money += 5;
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"You win against {Dealer.hand.BlackjackValue()}!");
+                    Console.ResetColor();
+                    Player.Money += 5;
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.WriteLine("It's a push!");
+                    Console.ResetColor();
                 }
             }
             Console.WriteLine("");
@@ -129,16 +148,16 @@ namespace Blackjack
 
         public void DealRound()
         {
-            player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
-            player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
-            dealer.DealSelf();
+            Player.hand.PlayingCards.Add(Dealer.deck.DrawOneFaceUp());
+            Player.hand.PlayingCards.Add(Dealer.deck.DrawOneFaceUp());
+            Dealer.DealSelf();
         }
 
         public void DisplayHands()
         {
             string output = "The dealer has ";
 
-            foreach (var card in dealer.hand.PlayingCards)
+            foreach (var card in Dealer.hand.PlayingCards)
             {
                 output += $"{card.OutputString()} ";
             }
@@ -148,12 +167,12 @@ namespace Blackjack
             output = "You have ";
 
             //coded for a single player
-            foreach (var card in player.hand.PlayingCards)
+            foreach (var card in Player.hand.PlayingCards)
             {
                 output += $"{card.OutputString()} ";
             }
 
-            output += $"Value: {player.hand.BlackjackValue()}";
+            output += $"Value: {Player.hand.BlackjackValue()}";
 
             Console.WriteLine(output);
         }

@@ -42,5 +42,13 @@ namespace Blackjack
             card.IsFaceUp = false;
             return card;
         }
+
+        public void FlipAllToFaceUp()
+        {
+            foreach (var card in PlayingCards)
+            {
+                card.IsFaceUp = true;
+            }
+        }
     }
 }

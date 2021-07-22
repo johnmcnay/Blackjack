@@ -40,7 +40,5 @@ namespace Blackjack
 
             return value;
         }
-
-
     }
 }
