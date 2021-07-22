@@ -9,7 +9,12 @@ namespace Blackjack
     class BlackjackPlayer : BlackjackSeat
     {
 
-        
+        public double Money { get; set; }
+
+        public BlackjackPlayer()
+        {
+            Money = 100d;
+        }
        
     }
 }

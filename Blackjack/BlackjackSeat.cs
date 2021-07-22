@@ -9,5 +9,10 @@ namespace Blackjack
     class BlackjackSeat
     {
         public BlackjackHand hand = new BlackjackHand();
+
+        public void DiscardAllCards()
+        {
+            hand = new BlackjackHand();
+        }
     }
 }

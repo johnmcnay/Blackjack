@@ -46,7 +46,7 @@ namespace Blackjack
                 return "??";
             }
 
-            return $"{Rank}{Suit}";
+            return $"{(Rank == "T" ? "10" : Rank)}{Suit}";
         }
     }
 }

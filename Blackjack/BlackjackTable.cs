@@ -12,8 +12,12 @@ namespace Blackjack
         public BlackjackPlayer player = new BlackjackPlayer();
         public BlackjackDealer dealer = new BlackjackDealer();
 
-        public void PlayersDecide()
+        public bool PlayerAction()
         {
+            Console.WriteLine($"You have ${player.Money}");
+
+            DisplayHands();
+            
             string input;
 
             do
@@ -35,12 +39,53 @@ namespace Blackjack
                     if (player.hand.BlackjackValue() > 21)
                     {
                         Console.WriteLine("You have busted!");
-                        return;
+                        player.Money -= 5;
+                        return false;
                     }
                 }
 
             } while (input.ToLower() != "stay");
 
+            return true;
+        }
+
+        public bool CheckForNaturalBlackjack()
+        {
+            int playerHandValue = player.hand.BlackjackValue();
+            int dealerHandValue = dealer.hand.BlackjackValue();
+
+            if (playerHandValue == 21)
+            {
+                if (dealerHandValue == 21)
+                {
+                    Console.WriteLine("Tough luck. It's a push!");
+                }
+                else
+                {
+                    Console.WriteLine("Blackjack! You win.");
+                    player.Money += 7.5;
+                }
+                return false;
+            }
+            else if (dealerHandValue == 21)
+            {
+                Console.WriteLine("Dealer gets a Blackjack. You lose!");
+                player.Money -= 5;
+                return false;
+            }
+
+            return true;
+        }
+
+        public void PrepareForNewRound()
+        {
+            player.DiscardAllCards();
+            dealer.DiscardAllCards();
+            dealer.deck = new PlayingCardDeck();
+        }
+
+        public void DealerAction()
+        {
             var faceDownCards = (from c in dealer.hand.PlayingCards
                                  where c.IsFaceUp == false
                                  select c).ToList();
@@ -60,28 +105,32 @@ namespace Blackjack
             if (dealer.hand.BlackjackValue() > 21)
             {
                 Console.WriteLine($"The dealer has busted with a {dealer.hand.BlackjackValue()}!");
-            } else
+                player.Money += 5;
+            }
+            else
             {
                 if (dealer.hand.BlackjackValue() > player.hand.BlackjackValue())
                 {
                     Console.WriteLine($"You lose against {dealer.hand.BlackjackValue()}!");
-                } 
-                else if (dealer.hand.BlackjackValue() < player.hand.BlackjackValue()) 
+                    player.Money -= 5;
+                }
+                else if (dealer.hand.BlackjackValue() < player.hand.BlackjackValue())
                 {
                     Console.WriteLine($"You win against {dealer.hand.BlackjackValue()}!");
+                    player.Money += 5;
                 }
                 else
                 {
                     Console.WriteLine("It's a push!");
                 }
             }
+            Console.WriteLine("");
         }
 
         public void DealRound()
         {
             player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
             player.hand.PlayingCards.Add(dealer.deck.DrawOneFaceUp());
-
             dealer.DealSelf();
         }
 
