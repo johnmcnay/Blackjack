@@ -6,7 +6,12 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            PlayingCard card = new PlayingCard { Rank = "A", Suit = PlayingCardSuit.Hearts };
+            BlackjackDealer dealer = new BlackjackDealer();
+
+            card.Display();
         }
     }
 }
