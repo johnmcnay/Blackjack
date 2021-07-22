@@ -15,11 +15,25 @@ namespace Blackjack
 
         }
 
-        public PlayingCard DrawOne()
+        private PlayingCard DrawOne()
         {
             PlayingCard card = this.PlayingCards[0];
             this.PlayingCards.RemoveAt(0);
 
+            return card;
+        }
+        
+        public PlayingCard DrawOneFaceUp()
+        {
+            PlayingCard card = DrawOne();
+            card.IsFaceUp = true;
+            return card;
+        }
+
+        public PlayingCard DrawOneFaceDown()
+        {
+            PlayingCard card = DrawOne();
+            card.IsFaceUp = false;
             return card;
         }
 

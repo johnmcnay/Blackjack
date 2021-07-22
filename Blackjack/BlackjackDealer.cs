@@ -15,15 +15,10 @@ namespace Blackjack
             this.deck.Shuffle();
         }
 
-        public void DealAllSeats()
-        {
-            
-        }
-
         public void DealSelf()
         {
-            hand.PlayingCards.Add(deck.DrawOne());
-            hand.PlayingCards.Add(deck.DrawOne());
+            hand.PlayingCards.Add(deck.DrawOneFaceUp());
+            hand.PlayingCards.Add(deck.DrawOneFaceDown());
         }
     }
 }

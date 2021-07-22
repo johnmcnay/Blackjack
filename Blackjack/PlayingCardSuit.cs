@@ -8,11 +8,11 @@ namespace Blackjack
 {
     public static class PlayingCardSuit
     {
-        private const string _HEARTS = "\u2661";
-        private const string _SPADES = "\u2664";
-        private const string _CLUBS = "\u2667";
-        private const string _DIAMONDS = "\u2662";
-        private const string _SUITS = "\u2661\u2664\u2667\u2662";
+        private const string _HEARTS = "H";
+        private const string _SPADES = "S";
+        private const string _CLUBS = "C";
+        private const string _DIAMONDS = "D";
+        private const string _SUITS = "HSCD";
 
         public static string Hearts { get { return _HEARTS; } }
         public static string Spades { get { return _SPADES; } }

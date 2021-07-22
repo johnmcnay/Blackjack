@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 namespace Blackjack
 {
     class PlayingCard
-    { 
+    {
         public string Rank { get; set; }
         public string Suit { get; set; }
+        public bool IsFaceUp { get; set; }
 
         public PlayingCard(int i)
         {
@@ -20,9 +21,32 @@ namespace Blackjack
             this.Rank = PlayingCardRank.GetRankFromInt(rank);
         }
 
-        public void Display()
+        public int GetBlackjackValue()
         {
-            Console.WriteLine($"{Rank}{Suit}");
+
+            if (int.TryParse(this.Rank, out var parsed) == false)
+            {
+                if (this.Rank == "A")
+                {
+                    return 11;
+                }
+                else
+                {
+                    return 10;
+                }
+            }
+
+            return parsed;
+        }
+
+        public string OutputString()
+        {
+            if (this.IsFaceUp == false)
+            {
+                return "??";
+            }
+
+            return $"{Rank}{Suit}";
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Blackjack
             BlackjackTable blackjack = new BlackjackTable();
 
             blackjack.DealRound();
+            blackjack.DisplayHands();
+            blackjack.PlayersDecide();
 
             return;
         }
