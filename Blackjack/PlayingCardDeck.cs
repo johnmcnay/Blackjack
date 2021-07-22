@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 namespace Blackjack
 {
    
-    class PlayingCardDeck
-    {
-        public List<PlayingCard> PlayingCards { get; set; }
-        
+    class PlayingCardDeck : PlayingCardPile
+    {        
         public PlayingCardDeck()
         {
             CreateDeck();
+            Shuffle();
         }
 
         private void CreateDeck()

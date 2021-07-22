@@ -8,8 +8,11 @@ namespace Blackjack
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            BlackjackDealer dealer = new BlackjackDealer();
+            BlackjackTable blackjack = new BlackjackTable();
 
+            blackjack.DealRound();
+
+            return;
         }
     }
 }

@@ -6,19 +6,24 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    class BlackjackDealer
+    class BlackjackDealer : BlackjackSeat
     {
+        public PlayingCardDeck deck = new PlayingCardDeck();
 
-        public PlayingCardDeck Deck;
-
-        public BlackjackDealer()
+        public void Shuffle()
         {
-            GrabNewDeck();
+            this.deck.Shuffle();
         }
 
-        private void GrabNewDeck()
+        public void DealAllSeats()
         {
-            this.Deck = new PlayingCardDeck();
+            
+        }
+
+        public void DealSelf()
+        {
+            hand.PlayingCards.Add(deck.DrawOne());
+            hand.PlayingCards.Add(deck.DrawOne());
         }
     }
 }

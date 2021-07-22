@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 namespace Blackjack
 {
     class PlayingCard
-    {
+    { 
+        public string Rank { get; set; }
+        public string Suit { get; set; }
+
         public PlayingCard(int i)
         {
             int suit = i % 4;
@@ -15,11 +18,7 @@ namespace Blackjack
 
             this.Suit = PlayingCardSuit.GetSuitFromInt(suit);
             this.Rank = PlayingCardRank.GetRankFromInt(rank);
-
         }
-
-        public string Rank { get; set; }
-        public string Suit { get; set; }
 
         public void Display()
         {
