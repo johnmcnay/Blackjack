@@ -11,22 +11,10 @@ namespace Blackjack
         public PlayingCard(int i)
         {
             int suit = i % 4;
+            int rank = i % 13;
 
-            switch (suit)
-            {
-                case 0:
-                    this.Suit = PlayingCardSuit.Clubs;
-                    break;
-                case 1:
-                    this.Suit = PlayingCardSuit.Spades;
-                    break;
-                case 2:
-                    this.Suit = PlayingCardSuit.Hearts;
-                    break;
-                case 3:
-                    this.Suit = PlayingCardSuit.Diamonds;
-                    break;
-            }
+            this.Suit = PlayingCardSuit.GetSuitFromInt(suit);
+            this.Rank = PlayingCardRank.GetRankFromInt(rank);
 
         }
 

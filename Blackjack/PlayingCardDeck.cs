@@ -6,19 +6,14 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    
-
-
+   
     class PlayingCardDeck
     {
- 
         public List<PlayingCard> PlayingCards { get; set; }
         
         public PlayingCardDeck()
         {
             CreateDeck();
-
-            return;
         }
 
         private void CreateDeck()
@@ -27,9 +22,8 @@ namespace Blackjack
 
             for (int i = 0; i < 52; i ++)
             {
-                this.PlayingCards.Add(i);
+                this.PlayingCards.Add(new PlayingCard(i));
             }
-
         }
     }
 }

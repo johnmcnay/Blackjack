@@ -8,6 +8,12 @@ namespace Blackjack
 {
     class PlayingCardRank
     {
+        private const string _RANKS = "A23456789TJQK";
         public string Rank { get; set; }
+
+        public static string GetRankFromInt(int rank)
+        {
+            return _RANKS.Substring(rank, 1);
+        }
     }
 }

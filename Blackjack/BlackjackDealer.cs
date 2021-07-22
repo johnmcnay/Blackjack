@@ -13,8 +13,12 @@ namespace Blackjack
 
         public BlackjackDealer()
         {
-            this.Deck = new PlayingCardDeck();
+            GrabNewDeck();
         }
 
+        private void GrabNewDeck()
+        {
+            this.Deck = new PlayingCardDeck();
+        }
     }
 }
